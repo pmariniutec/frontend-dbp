@@ -1,4 +1,6 @@
-# frontend
+# OpenDay Frontend DBP
+
+## Setup a .env file for local development (An example is provided)
 
 ## Project setup
 ```
@@ -24,6 +26,3 @@ npm run test
 ```
 npm run lint
 ```
-
-### Customize configuration
-See [Configuration Reference](https://cli.vuejs.org/config/).
