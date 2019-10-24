@@ -1,8 +1,39 @@
 import Vue from 'vue'
 import VueRouter from 'vue-router'
-import Home from '../views/Home.vue'
+import store from '@/store/index'
+
+import Home from '@/views/Home.vue'
+import Login from '@/views/Login.vue'
+import Register from '@/views/Register.vue'
 
 Vue.use(VueRouter)
+
+const requireAuth = (to, from, next) => {
+	store.dispatch('auth/checkAuthToken')
+		.then(() => {
+			if (!store.getters['auth/isAuthenticated']) {
+				next('/login')
+			} else {
+				next()
+			}
+		})
+}
+
+const requireNoAuth = (to, from, next) => {
+	store.dispatch('auth/checkAuthToken')
+		.then(() => {
+			if (store.getters['auth/isAuthenticated']) {
+				next('/')
+			} else {
+				next()
+			}
+		})
+}
+
+const redirectLogout = (to, from, next) => {
+	store.dispatch('auth/logout')
+		.then(() => next('/login'))
+}
 
 const routes = [
 	{
@@ -11,12 +42,32 @@ const routes = [
 		component: Home
 	},
 	{
-		path: '/about',
-		name: 'about',
-		// route level code-splitting
-		// this generates a separate chunk (about.[hash].js) for this route
-		// which is lazy-loaded when the route is visited.
-		component: () => import(/* webpackChunkName: "about" */ '../views/About.vue')
+		path: '/register',
+		name: 'register',
+		component: Register,
+		beforeEnter: requireNoAuth
+	},
+	{
+		path: '/login',
+		name: 'login',
+		component: Login,
+		beforeEnter: requireNoAuth
+	},
+	{
+		path: '/logout',
+		name: 'logout',
+		beforeEnter: redirectLogout
+	},
+	{
+		path: '/events',
+		name: 'events',
+		// Lazy loading for this route
+		component: () => import(/* webpackChunkName: "events" */ '@/views/Events.vue')
+	},
+	{
+		path: '/profile',
+		name: 'profile',
+		beforeEnter: requireAuth
 	}
 ]
 
