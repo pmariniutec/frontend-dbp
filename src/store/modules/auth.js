@@ -17,6 +17,16 @@ const TOKEN_STORAGE_KEY = 'openday_dbp_token'
 const auth = {
 	namespaced: true,
 
+	state: {
+		isAuthenticated: false,
+		error: null,
+		token: null
+	},
+
+	getters: {
+		isLoggedIn: (state) => state.isAuthenticated
+	},
+
 	actions: {
 		login ({ commit }, { email, password }) {
 			return authService.login(email, password)
@@ -30,6 +40,7 @@ const auth = {
 				.then(({ data }) => {
 					console.log(data)
 					commit(REGISTER_SUCCESS)
+					commit(SET_TOKEN, data.key)
 				})
 				.catch((err) => {
 					console.log(err)

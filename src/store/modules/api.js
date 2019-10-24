@@ -13,7 +13,7 @@ const api = {
 
 	actions: {
 		getEvents ({ commit }) {
-			apiService.getEvents()
+			return apiService.getEvents()
 				.then(({ data }) => data)
 				.catch((err) => err)
 		}
