@@ -62,6 +62,9 @@ export default {
 					password: this.input.password
 				}
 				this.register(credentials)
+					.then(() => {
+						this.$router.push({ name: 'profile' })
+					})
 			} else {
 				console.log('All Fields are required')
 			}

@@ -5,13 +5,14 @@ import store from '@/store/index'
 import Home from '@/views/Home.vue'
 import Login from '@/views/Login.vue'
 import Register from '@/views/Register.vue'
+import Profile from '@/views/Profile.vue'
 
 Vue.use(VueRouter)
 
 const requireAuth = (to, from, next) => {
 	store.dispatch('auth/checkAuthToken')
 		.then(() => {
-			if (!store.getters['auth/isAuthenticated']) {
+			if (store.getters['auth/isAuthenticated']) {
 				next('/login')
 			} else {
 				next()
@@ -22,7 +23,7 @@ const requireAuth = (to, from, next) => {
 const requireNoAuth = (to, from, next) => {
 	store.dispatch('auth/checkAuthToken')
 		.then(() => {
-			if (store.getters['auth/isAuthenticated']) {
+			if (!store.getters['auth/isAuthenticated']) {
 				next('/')
 			} else {
 				next()
@@ -67,6 +68,7 @@ const routes = [
 	{
 		path: '/profile',
 		name: 'profile',
+		component: Profile,
 		beforeEnter: requireAuth
 	}
 ]

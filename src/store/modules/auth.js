@@ -38,12 +38,15 @@ const auth = {
 		register ({ commit }, { firstName, lastName, email, password }) {
 			return authService.register(firstName, lastName, email, password)
 				.then(({ data }) => {
-					console.log(data)
-					commit(REGISTER_SUCCESS)
-					commit(SET_TOKEN, data.key)
+					if (data.key) {
+						commit(REGISTER_SUCCESS)
+						commit(SET_TOKEN, data.key)
+					} else {
+						commit(REGISTER_ERROR)
+					}
 				})
 				.catch((err) => {
-					console.log(err)
+					console.error(err)
 					commit(REGISTER_ERROR)
 				})
 		},
@@ -52,9 +55,11 @@ const auth = {
 			const token = JSON.parse(localStorage.getItem(TOKEN_STORAGE_KEY))
 			const now = Date.now()
 			if (token !== null && token.expiration) {
+				commit(LOGIN_SUCCESS)
 				commit(SET_TOKEN, token.token)
 			}
 			if (token !== null && token.expiration && token.expiration < now) {
+				commit(LOGIN_ERROR)
 				commit(REMOVE_TOKEN)
 			}
 		},
