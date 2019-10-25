@@ -4,15 +4,22 @@
 			<router-link :to="{ name: 'home' }">
 				Home
 			</router-link> |
-			<router-link :to="{ name: 'about' }">
-				About
-			</router-link>
-			<router-link :to="{ name: 'login' }">
-				Login
-			</router-link>
-			<router-link :to="{ name: 'register' }">
-				Register
-			</router-link>
+
+			<template v-if="!isAuthenticated">
+				<router-link :to="{ name: 'login' }">
+					Login
+				</router-link> |
+				<router-link :to="{ name: 'register' }">
+					Register
+				</router-link> |
+			</template>
+
+			<template v-if="isAuthenticated">
+				<router-link :to="{ name: 'profile' }">
+					Profile
+				</router-link> |
+			</template>
+
 			<router-link :to="{ name: 'events' }">
 				Upcoming Events
 			</router-link>
@@ -20,6 +27,28 @@
 		<router-view />
 	</div>
 </template>
+
+<script>
+import { mapGetters } from 'vuex'
+
+export default {
+	name: 'App',
+
+	data () {
+		return {
+
+		}
+	},
+
+	created () {
+
+	},
+
+	methods: {
+		...mapGetters('auth', ['isAuthenticated'])
+	}
+}
+</script>
 
 <style lang="scss">
 #app {
