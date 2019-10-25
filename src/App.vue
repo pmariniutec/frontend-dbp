@@ -1,38 +1,22 @@
 <template>
-	<div id="app">
-		<div id="nav">
-			<router-link :to="{ name: 'home' }">
-				Home
-			</router-link> |
-
-			<template v-if="!isAuthenticated">
-				<router-link :to="{ name: 'login' }">
-					Login
-				</router-link> |
-				<router-link :to="{ name: 'register' }">
-					Register
-				</router-link> |
-			</template>
-
-			<template v-if="isAuthenticated">
-				<router-link :to="{ name: 'profile' }">
-					Profile
-				</router-link> |
-			</template>
-
-			<router-link :to="{ name: 'events' }">
-				Upcoming Events
-			</router-link>
-		</div>
-		<router-view />
-	</div>
+	<v-app>
+		<NavBar />
+		<v-content>
+			<router-view />
+		</v-content>
+	</v-app>
 </template>
 
 <script>
-import { mapGetters } from 'vuex'
+import { mapActions } from 'vuex'
+import NavBar from '@/components/NavBar'
 
 export default {
 	name: 'App',
+
+	components: {
+		NavBar
+	},
 
 	data () {
 		return {
@@ -41,34 +25,14 @@ export default {
 	},
 
 	created () {
-
+		this.checkAuthToken()
+			.then(() => {
+				this.getUserData()
+			})
 	},
 
 	methods: {
-		...mapGetters('auth', ['isAuthenticated'])
+		...mapActions('auth', ['getUserData', 'checkAuthToken'])
 	}
 }
 </script>
-
-<style lang="scss">
-#app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
-  -webkit-font-smoothing: antialiased;
-  -moz-osx-font-smoothing: grayscale;
-  text-align: center;
-  color: #2c3e50;
-}
-
-#nav {
-  padding: 30px;
-
-  a {
-    font-weight: bold;
-    color: #2c3e50;
-
-    &.router-link-exact-active {
-      color: #42b983;
-    }
-  }
-}
-</style>

@@ -8,7 +8,8 @@ import {
 	LOGIN_ERROR,
 	LOGOUT,
 	SET_TOKEN,
-	REMOVE_TOKEN
+	REMOVE_TOKEN,
+	SET_USER
 } from './mutation-types'
 
 const TOKEN_DURATION = 2 * 24 * 60 * 60 * 1000 // 2 days
@@ -20,11 +21,13 @@ const auth = {
 	state: {
 		isAuthenticated: false,
 		error: null,
-		token: null
+		token: null,
+		user: null
 	},
 
 	getters: {
-		isAuthenticated: (state) => !!state.token && state.isAuthenticated
+		isAuthenticated: (state) => !!state.token,
+		getUser: (state) => state.user
 	},
 
 	actions: {
@@ -51,14 +54,14 @@ const auth = {
 				})
 		},
 
-		checkAuthToken ({ commit }) {
+		checkAuthToken ({ commit, dispatch }) {
 			const token = JSON.parse(localStorage.getItem(TOKEN_STORAGE_KEY))
 			const now = Date.now()
-			if (token !== null && token.expiration) {
+			if (token !== null && token.expiration > now) {
 				commit(LOGIN_SUCCESS)
 				commit(SET_TOKEN, token.token)
-			}
-			if (token !== null && token.expiration && token.expiration < now) {
+				dispatch('getUserData')
+			} else {
 				commit(LOGIN_ERROR)
 				commit(REMOVE_TOKEN)
 			}
@@ -72,7 +75,10 @@ const auth = {
 
 		getUserData ({ commit }) {
 			return authService.getAccountDetails()
-				.then(({ data }) => data)
+				.then(({ data }) => {
+					commit(SET_USER, data)
+					return data
+				})
 				.catch((err) => err)
 		}
 	},
@@ -105,6 +111,9 @@ const auth = {
 			localStorage.removeItem(TOKEN_STORAGE_KEY)
 			delete session.defaults.headers.Authorization
 			state.token = null
+		},
+		[SET_USER] (state, user) {
+			state.user = user
 		}
 	}
 }

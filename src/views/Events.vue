@@ -1,30 +1,41 @@
 <template>
-	<div id="events">
-		<h1 class="title">
-			Events
-		</h1>
-		<div v-if="events !== null">
-			<div
-				v-for="event in events"
-				:key="event.id"
-				class="events-wrapper"
+	<v-container fluid>
+		<div id="events">
+			<h1
+				align="center"
+				class="header"
 			>
-				<h2>{{ event.name }}</h2>
-				<h3>{{ event.when }}</h3>
-				<h3>{{ event.location }}</h3>
-				<h3>{{ event.description }}</h3>
-				<h3>{{ event.num_enrollments }}/{{ event.max_enrollments }}</h3>
-				<h3>{{ event.created }}</h3>
-			</div>
+				Events
+			</h1>
+			<v-row
+				v-if="events !== null"
+			>
+				<v-col
+					v-for="event in events"
+					:key="event.id"
+					cols="12"
+					sm="6"
+					md="3"
+					lg="3"
+					class="events-wrapper"
+				>
+					<EventCard :event="event" />
+				</v-col>
+			</v-row>
 		</div>
-	</div>
+	</v-container>
 </template>
 
 <script>
 import { mapActions } from 'vuex'
+import EventCard from '@/components/EventCard'
 
 export default {
 	name: 'Login',
+
+	components: {
+		EventCard
+	},
 	data () {
 		return {
 			events: null,
