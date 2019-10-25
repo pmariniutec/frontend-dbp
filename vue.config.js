@@ -1,7 +1,7 @@
 module.exports = {
 	'pluginOptions': {
 		's3Deploy': {
-			'awsProfile': 'personal',
+			'awsProfile': 'default',
 			'region': 'us-east-1',
 			'bucket': 'front-dbp',
 			'createBucket': true,
@@ -13,9 +13,7 @@ module.exports = {
 			'deployPath': '/',
 			'acl': 'public-read',
 			'pwa': false,
-			'enableCloudfront': true,
-			'cloudfrontId': '12435465',
-			'cloudfrontMatchers': '/*',
+			'enableCloudfront': false,
 			'uploadConcurrency': 5,
 			'pluginVersion': '3.0.0'
 		}

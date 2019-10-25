@@ -65,8 +65,6 @@ export default {
 					.then(() => {
 						this.$router.push({ name: 'profile' })
 					})
-			} else {
-				console.log('All Fields are required')
 			}
 		}
 	}

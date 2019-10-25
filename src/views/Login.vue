@@ -43,7 +43,10 @@
 							</v-card-text>
 							<v-card-actions>
 								<v-spacer />
-								<v-btn color="primary">
+								<v-btn
+									color="primary"
+									@click="loginUser"
+								>
 									Login
 								</v-btn>
 							</v-card-actions>
@@ -76,8 +79,6 @@ export default {
 			if (this.input.email !== '' && this.input.password !== '') {
 				const credentials = { email: this.input.email, password: this.input.password }
 				this.login(credentials)
-			} else {
-				console.log('A email and password must be present')
 			}
 		}
 	}

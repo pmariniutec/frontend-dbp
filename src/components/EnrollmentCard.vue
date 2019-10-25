@@ -112,7 +112,6 @@ export default {
 			this.deleteEnrollment(this.enrollment.id)
 				.then((data) => {
 					this.$emit('delete-enrollment')
-					console.log(data)
 				})
 		},
 
