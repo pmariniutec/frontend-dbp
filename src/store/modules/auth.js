@@ -24,7 +24,7 @@ const auth = {
 	},
 
 	getters: {
-		isLoggedIn: (state) => state.isAuthenticated
+		isAuthenticated: (state) => !!state.token && state.isAuthenticated
 	},
 
 	actions: {
