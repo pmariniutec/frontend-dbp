@@ -12,7 +12,7 @@ Vue.use(VueRouter)
 const requireAuth = (to, from, next) => {
 	store.dispatch('auth/checkAuthToken')
 		.then(() => {
-			if (store.getters['auth/isAuthenticated']) {
+			if (!store.getters['auth/isAuthenticated']) {
 				next('/login')
 			} else {
 				next()
@@ -23,8 +23,8 @@ const requireAuth = (to, from, next) => {
 const requireNoAuth = (to, from, next) => {
 	store.dispatch('auth/checkAuthToken')
 		.then(() => {
-			if (!store.getters['auth/isAuthenticated']) {
-				next('/')
+			if (store.getters['auth/isAuthenticated']) {
+				next('/profile')
 			} else {
 				next()
 			}
